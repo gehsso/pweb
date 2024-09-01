@@ -1,9 +1,12 @@
-#!/bin/bash
+echo "Starting build script"
 
-# Saia do script se qualquer comando falhar
-#set -e
+pip install -r requirements.txt
 
-# Coletando arquivos estáticos
-#python3 manage.py collectstatic
+# make migrations
+#python3 manage.py makemigrations
+#python3 manage.py migrate
 
-echo "Build process completed successfully!"
+# collectstatic
+python3 manage.py collectstatic
+
+echo "Build script completed"
