@@ -4,6 +4,6 @@
 set -e
 
 # Coletando arquivos estáticos
-python manage.py collectstatic --noinput
+python3 manage.py collectstatic --noinput
 
 echo "Build process completed successfully!"
