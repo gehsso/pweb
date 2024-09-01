@@ -1,0 +1,211 @@
+
+{% extends "base.html" %}
+
+{% block title %} Listagem de Produtos {% endblock %}
+
+
+{% block h1 %} Listagem de Produtos {% endblock %}
+
+
+{% block conteudo %}
+
+{% load static %}
+
+
+
+<button data-bs-toggle="tooltip" id="btnNovo" title="Novo Produto"  type="button" class="btn btn-outline-primary">Novo <i class="fa fa-file-o"></i></button>
+<a data-bs-toggle="tooltip" target="_blank" href="{% url 'relatorio_produto' %}" title="Relatório"  class="btn btn-outline-primary">Relatório <i class="fa fa-list"></i></a><br><br>
+
+
+<div>
+
+  <div class="form-group">
+    <label for="idProduto">ID</label>
+    <input type="text" id="idProduto" class="form-control" name="idProduto"  >
+  </div>
+
+
+  <div class="form-group">
+    <label for="descricao">Descrição</label>
+    <input type="text" id="descricao" class="form-control" name="descricao"  >
+  </div>
+
+
+
+  <br>
+  <button type="button" id="btnPesquisar" class="btn btn-primary">Pesquisa</button>
+</div>
+
+<br>
+ <div align="center" class="alert " id="msgRemover"></div>
+
+<div align="center" id="div_tabela">
+    <div class="loader"></div>
+</div>
+
+
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 id="modal_titulo" class="modal-title">Detalhes do Produto</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div align="center" id="modal_conteudo" class="modal-body">
+        <div class="loader"></div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" id="modalForm">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 id="form_titulo" class="modal-title">Formulário de Produto</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+     <span id="msg"></span>
+      <div align="left" id="form_conteudo" class="modal-body">
+        <div class="loader"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+   var dados =  {
+          "csrfmiddlewaretoken": "{{ csrf_token }}",
+   };
+
+   var urlform='';
+
+   function listaprodutos(){
+      $.post('{% url 'listagem_produto' %}',dados, function(retorno){
+		$('#div_tabela').html(retorno);
+      });
+   }
+
+   function qtde_produto(){
+      var url = '{% url 'qtde_produto' %}';
+      $.get(url, function(json) {
+              $('#div_quantidade').html('Produtos: ' + json.quantidade);
+      });
+
+   }
+
+   function limpa_msg(){
+     setInterval(function() {
+       $('#msgRemover').html('');
+       $('#msgRemover').removeClass("alert-success");
+       $('#msgRemover').removeClass("alert-danger");
+     }, 1000);
+
+   }
+
+$(document).ready(function(){
+
+   listaprodutos();
+   qtde_produto();
+    // Agende a chamada da função a cada 5 segundos
+    setInterval(qtde_produto, 5000);
+
+
+  $(document).on("click", ".botao", function(){
+    var nome_produdo = $(this).attr('data-nome');
+    var url = $(this).attr('data-url');
+    $('#modal_titulo').html(nome_produdo);
+    $('#myModal').modal('show');
+    $.post(url,dados, function(retorno){
+ 		$('#modal_conteudo').html(retorno);
+    });
+  });
+
+
+  $(document).on("click", "#btnPesquisar", function(){
+     var dados =  {
+            "csrfmiddlewaretoken": "{{ csrf_token }}",
+            "descricao": $('#descricao').val(),
+            "idProduto": $('#idProduto').val()
+
+     };
+     $('#div_tabela').html('<div class="loader"></div>');
+     $.post('{% url 'listagem_produto' %}',dados, function(retorno){
+          $('#div_tabela').html(retorno);
+     });
+
+  });
+
+
+  $(document).on("click", "#btnNovo", function(){
+    urlform = '{% url 'form_produto' %}';
+      $.get(urlform,dados, function(retorno){
+          $('#form_conteudo').html(retorno);
+          $('#modalForm').modal('show');
+      });
+   });
+
+  $(document).on("submit", "#form1", function(){
+        var dadosForm = $(this).serialize();
+        $.post(urlform, dadosForm, function(retorno) {
+           if (retorno.success) {
+                $('#modalForm').modal('hide');
+                listaprodutos();
+            } else
+                $('#msg').html(retorno.erros);
+        });
+        return false;
+  });
+
+  $(document).on("click", ".botaoEditar", function(){
+    urlform = $(this).attr('data-url');
+    $.get(urlform,dados, function(retorno){
+ 		  $('#form_conteudo').html(retorno);
+          $('#modalForm').modal('show');
+    });
+  });
+
+
+  $(document).on("click", ".botaoRemover", function(){
+    urlform = $(this).attr('data-url');
+    if (confirm("Deseja realmente remover esse registro?") == true)
+        $.get(urlform,dados, function(retorno){
+          if (retorno.success) {
+                $('#msgRemover').html(retorno.msg);
+                 $('#msgRemover').addClass("alert-success");
+                  listaprodutos();
+                  limpa_msg();
+              } else{
+                  $('#msgRemover').html(retorno.msg);
+                  $('#msgRemover').addClass("alert-danger");
+                  limpa_msg();
+              }
+
+        });
+  });
+
+});
+</script>
+
+{% endblock %}
+
+

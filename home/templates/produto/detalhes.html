@@ -1,0 +1,21 @@
+ {% load static %}
+ <div class="row">
+    <div class="col col-sm-2">ID:</div>
+	<div class="col col-sm-10"> {{produto.id}}</div>
+ </div>
+
+  <div class="row">
+    <div class="col col-sm-2">Descrição:</div>
+	<div class="col col-sm-10"> {{produto.nome}}</div>
+ </div>
+
+ <div class="row">
+    <div class="col col-sm-2">Valor:</div>
+	<div class="col col-sm-10"> R$ {{produto.preco}}</div>
+ </div>
+
+</div>
+
+ <div>
+    <img class="rounded-circle" style="max-width:100px" src="{% static 'imagens/' %}{{produto.id}}.jpg " alt="My image">
+ </div>

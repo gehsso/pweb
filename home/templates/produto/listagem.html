@@ -1,0 +1,32 @@
+ {% load static %}
+<table class="table table-striped table-hover ">
+
+<tr class="table-dark">
+
+
+                <th> Código</th>
+                <th>Imagem</th>
+                <th>Descrição</th>
+                <th>Valor (R$)</th>
+                {% if user.is_authenticated %}
+                <th>Ações</th>
+                {% endif %}
+            </tr>
+       {% for item in lista %}
+            <tr>
+                <td>{{item.id}}</td>
+                <td><img onerror="this.style.display='none'" style="max-height:100px" src="{% static 'imagens/' %}{{item.id}}.jpg"></td>
+                <td>{{item.nome}}</td>
+                <td> {{item.preco}}</td>
+                {% if user.is_authenticated %}
+                <th>
+                    <button data-bs-toggle="tooltip" title="Mais Detalhes" data-url="{% url 'detalhes_produto' pk=item.id %}"  data-nome="{{item.nome}}"  class="botao btn btn-outline-primary"><i class="fa fa-info"></i></button>
+                    <button data-bs-toggle="tooltip" title="Editar" data-url="{% url 'editar_produto' pk=item.id %}"  class="botaoEditar btn btn-outline-primary"><i class="fa fa-edit"></i></button>
+                    <button data-bs-toggle="tooltip" title="Remover" data-url="{% url 'remover_produto' pk=item.id %}" type="button" class="botaoRemover btn btn-outline-primary"><i class="fa fa-trash-o"></i></button>
+
+                </th>
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+ </table>
