@@ -145,7 +145,7 @@ def relatorio_produto(request):
     buffer = io.BytesIO()
     pdf = canvas.Canvas(buffer)
     cabecalho_y = 740
-    pdf.drawImage('e:\ifpi.png',10,cabecalho_y+20,80,68)
+   # pdf.drawImage('e:\ifpi.png',10,cabecalho_y+20,80,68)
     pdf.drawString(10, cabecalho_y, "Código")
     pdf.drawString(90, cabecalho_y, "Nome")
     pdf.drawString(480, cabecalho_y, "Valor(R$)")
