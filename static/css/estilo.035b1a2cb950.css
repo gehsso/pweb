@@ -1,0 +1,45 @@
+		    .cabecalho {
+		            background-color: orange;
+		            padding: 5px;
+		        }
+	        .conteudo {
+		            background-color: #f2f2f2;
+		            padding-left: 25px;
+		            float: right;
+		            width: 100%;
+		      }
+
+
+	 .loader {
+      border: 16px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 16px solid #3498db;
+      width: 120px;
+      height: 120px;
+      -webkit-animation: spin 2s linear infinite; /* Safari */
+      animation: spin 2s linear infinite;
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+
+    #div_quantidade {
+    width: 200px; /* Largura do card */
+    padding: 5px; /* Espaçamento interno */
+    background-color: #FFE4C4; /* Cor de fundo */
+    border: 1px solid #ddd; /* Borda sólida */
+    border-radius: 5px; /* Cantos arredondados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+    text-align: center; /* Alinhamento de texto central */
+    font-size: 18px; /* Tamanho da fonte */
+    margin: 5px auto; /* Margens automáticas para centralizar */
+}
